@@ -7,7 +7,7 @@
 	define( 'DB_PASSWORD', $_SERVER['DB_PASSWORD'] );
 	define( 'WP_CONTENT_DIR', __DIR__ . '/wp' );
 	define( 'WP_CONTENT_URL', 'http://' . $_SERVER['HTTP_HOST'] . '/wp' );
-	define( 'WP_DEFAULT_THEME', 'wp' );
+	define( 'WP_DEFAULT_THEME', 'twentyseventeen' );
 	define( 'WP_HOME', 'http://' . $_SERVER['HTTP_HOST'] );
 	define( 'WP_SITEURL', 'http://' . $_SERVER['HTTP_HOST'] . '/wordpress' );
 	define( 'EMPTY_TRASH_DAYS', 7 );

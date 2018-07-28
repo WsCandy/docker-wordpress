@@ -16,20 +16,16 @@ RUN apk add --no-cache --update --virtual .build-deps \
         libjpeg-turbo-dev \
         freetype-dev \
         libpng-dev \
-        imagemagick-dev \
     && curl --silent --show-error https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
     && apk add --no-cache --update \
-        imagemagick \
         libpng \
         libjpeg-turbo \
         freetype \
-    && pecl install imagick \
     && docker-php-source extract \
     && docker-php-ext-configure gd \
         --with-freetype-dir=/usr \
         --with-jpeg-dir=/usr \
         --with-png-dir=/usr \
-    && docker-php-ext-enable imagick \
     && docker-php-ext-install \
         gd \
         pdo_mysql \
@@ -39,12 +35,18 @@ RUN apk add --no-cache --update --virtual .build-deps \
     && rm -rf /var/www/html/vendor \
     && rm /var/www/html/composer.json \
     && rm /var/www/html/composer.lock \
+    && mkdir -p /var/www/html/httpdocs/wp/uploads \
+    && mkdir -p /var/www/html/httpdocs/wp/themes \
+    && mv /var/www/html/httpdocs/wordpress/wp-content/themes/twentyseventeen /var/www/html/httpdocs/wp/themes/twentyseventeen \
     && cd httpdocs \
     && ln -s wordpress/index.php index.php \
     && docker-php-source delete \
     && apk del --purge .build-deps \
     && rm -rf /var/cache/apk/* \
-    && rm -rf /tmp/*
+    && rm -rf /tmp/* \
+    && echo "Fixing file permissions..." \
+    && find /var/www/html -type d -exec chmod 0775 {} \; -exec chgrp www-data {} \; \
+    && find /var/www/html -type f -exec chmod 0664 {} \; -exec chgrp www-data {} \;
 
 EXPOSE 9000
 
