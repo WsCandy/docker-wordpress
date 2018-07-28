@@ -1,0 +1,65 @@
+defaults: &defaults
+  docker:
+    - image: wscandy/ci-docker:1.1.0
+  working_directory: ~/repo
+
+version: 2
+jobs:
+  build:
+    <<: *defaults
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run:
+          name: Build Images
+          command: make -f .circleci/Makefile build VERSION=${CIRCLE_BRANCH}
+  build_tagged:
+    <<: *defaults
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run:
+          name: Build Images
+          command: make -f .circleci/Makefile build VERSION=${CIRCLE_TAG}
+      - persist_to_workspace:
+          root: .
+          paths:
+            - docker_cache
+  push:
+    <<: *defaults
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/repo
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run:
+          name: Push Images
+          command: make -f .circleci/Makefile deploy VERSION=${CIRCLE_TAG}
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - build:
+          context: wscandy
+  build_deploy:
+    jobs:
+      - build_tagged:
+          context: wscandy
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              ignore: /.*/
+      - push:
+          context: wscandy
+          requires:
+            - build_tagged
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              ignore: /.*/
