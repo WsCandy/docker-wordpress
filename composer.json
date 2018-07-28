@@ -1,0 +1,32 @@
+{
+    "prefer-stable": true,
+    "config": {
+        "secure-http": false
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "http://wpackagist.org"
+        }
+    ],
+    "require": {
+        "composer/installers": ">=1.0",
+        "fancyguy/webroot-installer": "1.0.0",
+        "johnpbloch/wordpress": ">=4.9",
+        "wpackagist-plugin/wordpress-seo": ">=3.1.1",
+        "wpackagist-plugin/regenerate-thumbnails": ">=2.2.6",
+        "wpackagist-plugin/wp-bcrypt": ">=1.0.1"
+    },
+    "extra": {
+        "wordpress-install-dir": "httpdocs/wordpress",
+        "webroot-package": "wordpress",
+        "installer-paths": {
+            "httpdocs/wp/plugins/{$name}/": [
+                "type:wordpress-plugin"
+            ],
+            "httpdocs/wp/themes/{$name}/": [
+                "type:wordpress-theme"
+            ]
+        }
+    }
+}
