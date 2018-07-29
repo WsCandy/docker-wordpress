@@ -1,15 +1,22 @@
 <?php
 
+	$protocol = $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https' ? 'https' : 'http';
+
+	// HTTPS Fixes
+	if( $protocol === 'https' ) {
+		$_SERVER['HTTPS'] = 'on';
+	}
+
 	define( 'ADMIN_COOKIE_PATH', '/' );
 	define( 'DB_HOST', $_SERVER['DB_HOST'] );
 	define( 'DB_NAME', $_SERVER['DB_NAME'] );
 	define( 'DB_USER', $_SERVER['DB_USER'] );
 	define( 'DB_PASSWORD', $_SERVER['DB_PASSWORD'] );
 	define( 'WP_CONTENT_DIR', __DIR__ . '/wp' );
-	define( 'WP_CONTENT_URL', 'http://' . $_SERVER['HTTP_HOST'] . '/wp' );
+	define( 'WP_CONTENT_URL', $protocol . '://' . $_SERVER['HTTP_HOST'] . '/wp' );
 	define( 'WP_DEFAULT_THEME', 'twentyseventeen' );
-	define( 'WP_HOME', 'http://' . $_SERVER['HTTP_HOST'] );
-	define( 'WP_SITEURL', 'http://' . $_SERVER['HTTP_HOST'] . '/wordpress' );
+	define( 'WP_HOME', $protocol . '://' . $_SERVER['HTTP_HOST'] );
+	define( 'WP_SITEURL', $protocol . '://' . $_SERVER['HTTP_HOST'] . '/wordpress' );
 	define( 'EMPTY_TRASH_DAYS', 7 );
 	define( 'WP_POST_REVISIONS', 5 );
 	define( 'IMAGE_EDIT_OVERWRITE', true );
