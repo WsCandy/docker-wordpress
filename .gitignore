@@ -3,3 +3,8 @@
 
 # CI
 docker_cache
+
+# Composer
+vendor
+httpdocs/wordpress
+httpdocs/wp
